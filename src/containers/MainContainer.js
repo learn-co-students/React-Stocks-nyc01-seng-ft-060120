@@ -49,17 +49,24 @@ class MainContainer extends Component {
    
   }
 
+  filterHandler = (obj) =>  {
+    this.setState({filter: obj})
+  }
 
-  filterHandler = (obj) => {
-    this.setState({filter: obj}, ()=> {
-      let filteredStocks = [...this.state.stocks]
-      filteredStocks = filteredStocks.filter(stock => stock.type === this.state.filter )
-      this.setState({stocks: filteredStocks})
-    })
+  filterStocks = () => {
+    let filteredStocks = [...this.state.stocks]
+
+    if(this.state.filter !== 'All'){
+      filteredStocks = filteredStocks.filter(stock => stock.type === this.state.filter )  
+    } 
+
+    return filteredStocks
+     
   }
 
 
   render() {
+    let filterStocks = this.filterStocks()
     return (
       <div>
         <SearchBar sortHandler={this.sortHandler} filterHandler={this.filterHandler}/>
@@ -67,7 +74,7 @@ class MainContainer extends Component {
           <div className="row">
             <div className="col-8">
 
-              <StockContainer stocks={this.state.stocks} clickHandler={this.clickHandler}/>
+              <StockContainer stocks={filterStocks} clickHandler={this.clickHandler}/>
 
             </div>
             <div className="col-4">
