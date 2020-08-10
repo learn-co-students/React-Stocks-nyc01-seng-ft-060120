@@ -37,7 +37,7 @@ const SearchBar = (props) => {
           <option value='Finance'>Finance</option>
         </select>
       </label>
-    </div>
+    </div>    
   );
 }
 

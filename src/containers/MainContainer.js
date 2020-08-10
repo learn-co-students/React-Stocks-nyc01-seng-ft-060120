@@ -10,8 +10,8 @@ class MainContainer extends Component {
   state = {
     stocks: [],
     portfolio: [],
-    filterSelection: [],
-    sort: []
+    filter: 'All',
+    sort: 'None'
   };
 
   componentDidMount() {
@@ -32,53 +32,39 @@ class MainContainer extends Component {
   }
 
   checkHandler = (e) => {
-    selected[e.target.value] = !selected[e.target.value]
-    console.log(selected)
-    let stocks = this.filterSelection || this.state.stocks
-    if( e.target.value === 'Alphabetically' && selected[e.target.value] === true) {
-      this.setState({filterSelection: stocks.sort((a,b) => {
-        if (a.name < b.name) return -1
-        if (a.name > b.name) return 1
-        return 0
-      })})
-    }
-
-    if (
-      e.target.value === "Alphabetically" &&
-      selected[e.target.value] === false
-    ) { this.setState({filterSelection: this.state.stocks})}
-      if (e.target.value === "Price") {
-        this.setState({
-          filterSelection: stocks.sort((a, b) => {
-            if (a.price < b.price) return -1;
-            if (a.price > b.price) return 1;
-            return 0;
-          }),
-        });
-      }
+    this.setState({sort: e.target.value})
   }
 
   filterHandler = (e) => {
-    let newStocks = e.target.value !== 'All' ?
-    this.state.stocks.filter(stock => stock.type === e.target.value) :
-    this.state.stocks
-    this.setState({filterSelection: newStocks})
+    this.setState({filter: e.target.value})
   }
 
   displayStocks = () => {
-    return !!this.state.filterSelection  ? this.state.filterSelection : this.state.stocks
+    let filteredStocks = [...this.state.stocks]
+    if (this.state.filter !== 'All') {
+      filteredStocks = filteredStocks.filter(stock => stock.type === this.state.filter)
+    }
+
+    switch  (this.state.sort) {
+      case 'Alphabetically':
+        return filteredStocks.sort((a, b) => a.name > b.name ? 1 : -1)
+      case 'Price':
+        return filteredStocks.sort((a,b) => a.price>b.price ? 1 : -1)
+      default:
+        return filteredStocks
+    }
   }
 
   render() {
     let stocks = this.displayStocks()
     return (
       <div>
-        <SearchBar sort={this.state.sort} filter={this.state.filterSelection} filterHandler={this.filterHandler} checkHandler={this.checkHandler}/>
+        <SearchBar sort={this.state.sort} filter={this.state.filter} filterHandler={this.filterHandler} checkHandler={this.checkHandler}/>
 
         <div className='row'>
           <div className='col-8'>
             <StockContainer
-              stocksHandler={this.stocksHandler}
+              stocksHandler={this.stocksHandler}  
               stocks={this.state.stocks}
               display={stocks}
             />
