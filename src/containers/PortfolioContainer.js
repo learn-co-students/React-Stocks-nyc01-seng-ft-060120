@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Stock from '../components/Stock'
+import React, { Component } from "react";
+import Stock from "../components/Stock";
 
 class PortfolioContainer extends Component {
 
@@ -7,13 +7,17 @@ class PortfolioContainer extends Component {
     return (
       <div>
         <h2>My Portfolio</h2>
-          {
-            //render your portfolio stocks here
-          }
+        {this.props.stocks.map((stock) => (
+          <Stock
+            stocksHandler={this.props.stocksHandler}
+            key={stock.id}
+            stock={stock}
+            portfolioHandler={this.props.portfolioHandler}
+          />
+        ))}
       </div>
     );
   }
-
 }
 
 export default PortfolioContainer;
