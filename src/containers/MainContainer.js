@@ -12,6 +12,7 @@ class MainContainer extends Component {
     sort: 'None'
   }
 
+
   componentDidMount(){
     fetch("http://localhost:3000/stocks")
     .then(resp => resp.json())
